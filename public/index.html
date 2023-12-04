@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"
+    />
+    <title>YoloWay Web AR Watch Demo</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" href="images/yolo-favicon-01.ico" type="image/x-icon" />
+    <script>
+      window.timing = {};
+      window.startTime = performance.now();
+    </script>
+    <!-- <style>
+       #feet-text {
+      position: fixed; 
+      top: 50%;
+      left: 0%;
+      text-align: center;
+      width: 100%;
+      color: white;
+    }
+    </style> -->
+  </head>
+  <body style="background-color: black; position: relative; margin: 0">
+    <canvas
+      id="watermarked-canvas"
+      oncontextmenu="event.preventDefault()"
+      style="display: none"
+    ></canvas>
+
+    <!-- <div id="hand" style="    position: absolute;
+    top: 50vh;
+    z-index: 99;
+    left: 26vw;
+    transform: translate(-50%, -50%);">
+      <img style="height: 51vw;
+      width: 188vw;
+      width: 148vw;" src="images/hand.png"></img>
+    </div> -->
+
+    <div
+      id="main"
+      style="
+        visibility: hidden;
+        position: fixed;
+        left: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+      "
+    >
+      <div>
+        <!-- loading screen -->
+        <div
+          id="loading"
+          style="
+            background-color: black;
+            position: fixed;
+            left: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          "
+        >
+          <div
+            style="
+              z-index: 100;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+            "
+          >
+            <img
+              src="images/Yoloway-01.png"
+              style="width: 200px; margin-bottom: 48px"
+              alt="logo"
+            />
+
+            <p style="color: white; font-size: 1.3rem">
+              Watches try-on loading...
+            </p>
+
+            <!-- progress bar -->
+            <div
+              style="
+                width: 100%;
+                height: 8px;
+                margin-bottom: 32px;
+                background-color: rgb(55 65 81 / 1);
+                border-radius: 100px;
+                overflow: hidden;
+              "
+            >
+              <div id="loading-progress-bar"></div>
+            </div>
+
+            <img
+              src="images/Powered_by_Yolo-way-01.png"
+              style="
+                width: 100px;
+                margin-top: 8rem;
+                margin-bottom: 1rem;
+                opacity: 60%;
+              "
+              alt="logo"
+            />
+          </div>
+        </div>
+
+        <!-- permission denied screen -->
+        <div
+          style="
+            background-color: black;
+            position: fixed;
+            left: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          "
+          id="permission-denied"
+        >
+          <div
+            style="
+              z-index: 100;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+            "
+          >
+            <div
+              id="camera_denied"
+              style="
+                color: white;
+                text-align: center;
+                padding: 1rem;
+                font-size: 2rem;
+              "
+            >
+              <p>Please reload and allow camera access to use this app.</p>
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                "
+              >
+                <button
+                  onclick="window.location.reload()"
+                  class="button"
+                  style="
+                    background-color: white;
+                    padding: 0.8rem 1.2rem;
+                    color: black;
+                    text-decoration: none;
+                    font-size: 1.2rem;
+                    font-style: medium;
+                  "
+                >
+                  <img src="icons/reload.svg" style="width: 1.5rem" />
+                  Reload
+                </button>
+                <a
+                  href="https://www.yolo-way.com"
+                  target="_blank"
+                  style="
+                    padding: 0.8rem 1.2rem;
+                    color: white;
+                    text-decoration: none;
+                    font-size: 1.2rem;
+                  "
+                >
+                  Discover more
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- AR screen -->
+        <div
+          id="ar-screen"
+          style="position: absolute; left: 0; right: 0; top: 0; bottom: 0"
+        >
+          <canvas
+            style="
+              position: fixed;
+              left: 0;
+              right: 0;
+              max-width: 100%;
+              max-height: 100%;
+              margin: auto;
+            "
+            id="deepar-canvas"
+            oncontextmenu="event.preventDefault()"
+          ></canvas>
+
+          <img
+            id="info-logo"
+            src="images/yoloooo-01.png"
+            style="
+              position: absolute;
+              top: 4rem;
+              left: 50%;
+              transform: translateX(-50%);
+              width: 8rem;
+              cursor: pointer;
+              margin-bottom: 1rem;
+            "
+            alt="logo"
+          />
+
+          <!-- more info screen -->
+          <div
+            id="more-info-screen"
+            style="
+              position: absolute;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              background-color: white;
+              z-index: 200;
+              display: none;
+            "
+          >
+            <div style="max-width: 700px; margin: auto">
+              <img
+                src="images/Yoloway_logo-01.jpg"
+                alt="Sky Live in the living room"
+                style="width: 100%"
+              />
+              <div
+                style="
+                  color: black;
+                  max-width: 600px;
+                  font-size: 1.2rem;
+                  font-style: normal;
+                  padding: 0 2rem;
+                  text-align: center;
+                  display: flex;
+                  flex-direction: column;
+                  align-items: center;
+                "
+              >
+                <h1 style="margin-bottom: 12px">YoloWay Watches</h1>
+                <p style="margin: 12px 0">
+                  Discover the exclusive collection of Man's watches
+                  available in different silhouettes and colours.
+                </p>
+                <p style="margin: 12px 0">
+                  Learn how to use YoloWay to create your own AR experiences at
+                  <a href="https://yolo-way.com" target="_blank">YoloWay</a>.
+                </p>
+                <a
+                  href="https://yolo-way.com"
+                  target="_blank"
+                  class="button"
+                  style="
+                    background-color: black;
+                    padding: 0.8rem 1.2rem;
+                    color: white;
+                    text-decoration: none;
+                    font-size: 1.2rem;
+                    font-style: medium;
+                    text-align: center;
+                    max-width: 200px;
+                    text-align: center;
+                    margin-top: 20px;
+                  "
+                >
+                  Get started
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- try on mobile qr code -->
+          <!-- <div
+            id="qr-code-canvas-container"
+            style="
+              position: absolute;
+              bottom: 0;
+              left: 0;
+              padding-right: 0.5rem;
+              background-color: white;
+              border-top-right-radius: 12px;
+              display: none;
+              flex-direction: column;
+              justify-content: center;
+              align-items: center;
+              overflow: hidden;
+            "
+          >
+            <p
+              style="
+                margin: 1rem 0 0 0;
+                font-size: 1.1rem;
+                color: rgba(0, 0, 0);
+              "
+            >
+              Try on mobile
+            </p>
+            <canvas
+              id="qr-code-canvas"
+              height="100"
+              width="100"
+              style="max-width: 150px; max-height: 150px"
+            ></canvas>
+          </div> -->
+
+          <!-- video recording status -->
+          <div
+            id="recording-status"
+            style="
+              position: absolute;
+              background-color: black;
+              padding: 10px;
+              width: 60px;
+              height: 60px;
+              border-radius: 100%;
+              color: white;
+              top: 16px;
+              left: 50%;
+              font-size: 2rem;
+              transform: translateX(-50%);
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              display: none;
+            "
+          >
+            <span><span id="seconds">0</span><span>s</span></span>
+
+            <canvas
+              id="recording-status-canvas"
+              width="60"
+              height="60"
+              style="
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+              "
+            ></canvas>
+          </div>
+
+          <!-- welcome popup -->
+          <div
+            id="welcome-popup-wrapper"
+            style="
+              position: absolute;
+              left: 0;
+              right: 0;
+              top: 0;
+              bottom: 0;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              z-index: 1000;
+            "
+          >
+            <div
+              id="welcome-popup"
+              style="
+                min-width: 200px;
+                background-color: rgba(0, 0, 0, 0.85);
+                padding: 1rem;
+                margin: 1rem;
+                max-width: 500px;
+                z-index: 1001;
+              "
+            >
+              <div
+                style="
+                  display: flex;
+                  flex-direction: column;
+                  justify-content: center;
+                  align-items: center;
+                  margin: 2rem 0;
+                "
+              >
+                <img
+                  id="logo-img"
+                  src="images/yoloooo-01.png"
+                  style="width: 10rem"
+                  alt="logo"
+                />
+                <div
+                  style="
+                    color: white;
+                    max-width: 600px;
+                    font-size: 1.2rem;
+                    font-style: normal;
+                    padding: 0 2rem;
+                  "
+                >
+                  <p style="margin: 32px 0">
+                    Discover the exclusive collection of Man's Watches
+                    available in different silhouettes and colours.
+                  </p>
+                </div>
+                <button
+                  class="welcome-popup-close-button button"
+                  style="
+                    background-color: white;
+                    padding: 0.8rem 1.2rem;
+                    color: black;
+                    text-decoration: none;
+                    font-size: 1.2rem;
+                    font-style: medium;
+                    cursor: pointer;
+                  "
+                >
+                  Try them on
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- toolbar -->
+          <div
+            id="toolbar"
+            style="
+              z-index: 200;
+              position: absolute;
+              bottom: 0;
+              left: 0;
+              right: 0;
+              width: 100%;
+              display: flex;
+              justify-content: center;
+              flex-direction: column;
+            "
+          >
+            <div id="effect-names">
+              <p
+                id="effect-title"
+                style="text-align: center; font-size: 1.2rem"
+              ></p>
+            </div>
+            <div class="carousel" id="carousel">
+              <div class="carousel-center" id="carousel-center">
+                <div
+                  class="lds-ring"
+                  id="loading-spinner"
+                  style="display: none"
+                >
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                </div>
+              </div>
+              <div class="carousel-inner inner">
+                <div class="toolbar-photo slide">
+                  <img
+                    class="responsive-img"
+                    src="./images/Titonii_01.png"
+                  />
+                </div>
+                <div class="toolbar-photo slide">
+                  <img
+                    class="responsive-img"
+                    src="./images/omega_02.png"
+                  />
+                </div>
+                <div class="toolbar-photo slide">
+                  <img
+                    class="responsive-img"
+                    src="./images/germinii_03.png"
+                  />
+                </div>
+                <!-- <div id="more-info" class="toolbar-photo slide">
+                  <img
+                    style="
+                      width: 100%;
+                      height: 100%;
+                      object-fit: cover;
+                      pointer-events: none;
+                    "
+                    src="images/prada-icon.jpeg"
+                  />
+                </div> -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- share image -->
+        <div
+          id="share-image"
+          class="fixed-fullscreen"
+          style="
+            background-color: black;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+          "
+        >
+          <!-- close icon -->
+          <div
+            id="close-share-image"
+            class="no-select"
+            style="
+              position: absolute;
+              top: 1rem;
+              right: 1rem;
+              color: white;
+              cursor: pointer;
+              z-index: 300;
+              background-color: black;
+              border-radius: 100%;
+              width: 3rem;
+              height: 3rem;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+            "
+          >
+            <img
+              src="icons/interface-delete.svg"
+              style="width: 1.5rem; height: 1.5rem"
+            />
+          </div>
+          <div
+            id="share-image-container"
+            style="
+              display: flex;
+              justify-content: center;
+              flex-grow: 1;
+              max-height: 86%;
+              width: 100%;
+            "
+          ></div>
+          <div
+            style="
+              background-color: black;
+              padding: 0.6rem;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              height: 60px;
+              width: 100%;
+            "
+          >
+            <button
+              id="share-image-btn"
+              class="button"
+              style="
+                background-color: white;
+                padding: 0.8rem 2rem;
+                color: black;
+                text-decoration: none;
+                font-size: 1.2rem;
+                font-style: medium;
+                display: inline-flex;
+                align-items: center;
+                gap: 0.5rem;
+              "
+            >
+              <span id="share-image-btn-text">Share</span>
+              <img
+                id="share-image-btn-send-icon"
+                src="icons/send.svg"
+                style="width: 1.3rem; display: none"
+              />
+              <img
+                id="share-image-btn-download-icon"
+                src="icons/download.svg"
+                style="width: 1.3rem; display: none"
+              />
+            </button>
+          </div>
+        </div>
+
+        <!-- share video -->
+        <div
+          id="share-video"
+          class="fixed-fullscreen"
+          style="
+            background-color: black;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+          "
+        >
+          <div
+            id="close-share-video"
+            class="no-select"
+            style="
+              position: absolute;
+              top: 1rem;
+              right: 1rem;
+              color: white;
+              cursor: pointer;
+              z-index: 300;
+              background-color: black;
+              border-radius: 100%;
+              width: 3rem;
+              height: 3rem;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+            "
+          >
+            <img
+              src="icons/interface-delete.svg"
+              style="width: 1.5rem; height: 1.5rem"
+            />
+          </div>
+          <video
+            id="player"
+            autoplay
+            loop
+            muted
+            playsinline
+            style="max-width: 100%; max-height: 86%; border-radius: 12px"
+          ></video>
+
+          <div
+            style="
+              background-color: black;
+              padding: 0.6rem;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              height: 60px;
+              width: 100%;
+            "
+          >
+            <button
+              id="share-video-btn"
+              class="button"
+              style="
+                background-color: white;
+                color: black;
+                text-decoration: none;
+                font-size: 1.2rem;
+                font-style: medium;
+                height: 60px;
+                padding: 0 2rem;
+                display: inline-flex;
+                align-items: center;
+                gap: 0.5rem;
+              "
+            >
+              <span id="share-video-btn-text"></span>
+              <img
+                id="share-video-btn-send-icon"
+                src="icons/send.svg"
+                style="width: 1.3rem; display: none"
+              />
+              <img
+                id="share-video-btn-download-icon"
+                src="icons/download.svg"
+                style="width: 1.3rem; display: none"
+              />
+              <div class="loading-ring" id="share-video-btn-loader">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+              </div>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <h3 id="feet-text">PUT YOUR LEFT HAND IN THE PICTURE</h1>
+    <script type="text/javascript" src="main.js"></script>
+  </body>
+</html>
