@@ -136,9 +136,9 @@ async function main() {
 
       // debugger;
       const url = new URL(window.location.href);
-      const watchId = url.searchParams.get('watchId');
+      const watchId = url.searchParams.get('watchId') ?? effects[0].watchId;
       const watch = effects.find(watch => watch.watchId == watchId);
-
+        
       deepAR = await deepar.initialize({
         licenseKey: "352e69b9f4d55ad7f451ccd80570165f4a752f6647efe4aecd10c0a3e10f96c21f45505012db1f28",
         canvas,
@@ -161,7 +161,8 @@ async function main() {
       deepARInitialisedEvent(platform);
 
       const effectTitleElement = document.getElementById("effect-title");
-      effectTitleElement.innerHTML = watch.name;
+      effectTitleElement.innerHTML = watch.name; // whatch.image
+
 
       setUiScreen("ar-screen");
       arLoadedEvent();
