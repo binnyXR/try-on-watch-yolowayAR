@@ -140,7 +140,7 @@ async function main() {
       const watch = effects.find(watch => watch.watchId == watchId);
         
       deepAR = await deepar.initialize({
-        licenseKey: "352e69b9f4d55ad7f451ccd80570165f4a752f6647efe4aecd10c0a3e10f96c21f45505012db1f28",
+        licenseKey: "",
         canvas,
         effect: watch.path,
         additionalOptions: {
