@@ -4,8 +4,8 @@
   "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack --config webpack.config.js --mode production && cp -r public/* dist",
-    "dev": "cp -r public/* dist && webpack serve --mode development --open --port 8888"
+    "build": "webpack --config webpack.config.js --mode production && copy -r public/* dist",
+    "start": "webpack-dev-server --config webpack.config.js --host localhost --port 8080 --open"
   },
   "author": "DeepAR",
   "license": "ISC",

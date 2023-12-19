@@ -8,23 +8,26 @@ import QRCode from "qrcode";
 const VIDEO_TIME_LIMIT_SECONDS = 10;
 
 // add the urls for your effects here
-const effects = {
-  effect1: {
+const effects = [
+  {
+    watchId: "000",
     trigger: "effect1",
     path: "Effects/TitoniF.deepar",
     name: "Titon Watch - Black",
   },
-  effect2: {
+  {
+    watchId: "001",
     trigger: "effect2",
     path: "Effects/Omega_f.deepar",
     name: "Omega Watch - Black",
   },
-  effect3: {
+  {
+    watchId: "003",
     trigger: "effect3",
     path: "Effects/Garamin.deepar",
     name: "Garmin Watch - Orange",
   },
-};
+];
 
 async function main() {
   initialLoading();
@@ -131,10 +134,15 @@ async function main() {
       canvas.width = Math.floor(window.innerWidth * scale);
       canvas.height = Math.floor(window.innerHeight * scale);
 
+      // debugger;
+      const url = new URL(window.location.href);
+      const watchId = url.searchParams.get('watchId') ?? effects[0].watchId;
+      const watch = effects.find(watch => watch.watchId == watchId);
+        
       deepAR = await deepar.initialize({
         licenseKey: "",
         canvas,
-        effect: effects.effect1.path,
+        effect: watch.path,
         additionalOptions: {
           cameraConfig: {
             facingMode: "environment",
@@ -148,12 +156,13 @@ async function main() {
         },
       });
 
-      window.effectPath = effects.effect1.path;
-      window.effectName = effects.effect1.name;
+      window.effectPath = watch.path;
+      window.effectName = watch.name;
       deepARInitialisedEvent(platform);
 
       const effectTitleElement = document.getElementById("effect-title");
-      effectTitleElement.innerHTML = effects.effect1.name;
+      effectTitleElement.innerHTML = watch.name; // whatch.image
+
 
       setUiScreen("ar-screen");
       arLoadedEvent();
