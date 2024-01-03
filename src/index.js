@@ -18,15 +18,93 @@ const effects = [
   {
     watchId: "001",
     trigger: "effect2",
-    path: "Effects/Omega_f.deepar",
-    name: "Omega Watch - Black",
+    path: "Effects/001.deepar",
+    name: "Titon Watch",
   },
   {
-    watchId: "003",
-    trigger: "effect3",
-    path: "Effects/Garamin.deepar",
-    name: "Garmin Watch - Orange",
+    watchId: "010",
+    trigger: "",
+    path: "Effects/010.deepar",
+    name: "Titon Watch",
   },
+  {
+    watchId: "011",
+    trigger: "",
+    path: "Effects/011.deepar",
+    name: "Titon Watch",
+  },
+  {
+    watchId: "012",
+    trigger: "",
+    path: "Effects/012.deepar",
+    name: "Titon Watch",
+  },
+  {
+    watchId: "100",
+    trigger: "",
+    path: "Effects/100.deepar",
+    name: "Titon Watch",
+  },
+  {
+    watchId: "101",
+    trigger: "",
+    path: "Effects/101.deepar",
+    name: "Titon Watch",
+  },
+  {
+    watchId: "102",
+    trigger: "",
+    path: "Effects/102.deepar",
+    name: "Titon Watch",
+  },
+  {
+    watchId: "110",
+    trigger: "",
+    path: "Effects/110.deepar",
+    name: "Titon Watch",
+  },
+  {
+    watchId: "111",
+    trigger: "",
+    path: "Effects/111.deepar",
+    name: "Titon Watch",
+  },
+  {
+    watchId: "200",
+    trigger: "",
+    path: "Effects/200.deepar",
+    name: "Titon Watch",
+  },
+  {
+    watchId: "201",
+    trigger: "",
+    path: "Effects/201.deepar",
+    name: "Titon Watch",
+  },
+  {
+    watchId: "202",
+    trigger: "",
+    path: "Effects/202.deepar",
+    name: "Titon Watch",
+  },
+  {
+    watchId: "210",
+    trigger: "",
+    path: "Effects/210.deepar",
+    name: "Titon Watch",
+  },
+  {
+    watchId: "211",
+    trigger: "",
+    path: "Effects/211.deepar",
+    name: "Titon Watch",
+  },
+  {
+    watchId: "212",
+    trigger: "",
+    path: "Effects/212.deepar",
+    name: "Titon Watch",
+  }
 ];
 
 async function main() {
@@ -140,7 +218,7 @@ async function main() {
       const watch = effects.find(watch => watch.watchId == watchId);
         
       deepAR = await deepar.initialize({
-        licenseKey: "",
+        licenseKey: "352e69b9f4d55ad7f451ccd80570165f4a752f6647efe4aecd10c0a3e10f96c21f45505012db1f28",
         canvas,
         effect: watch.path,
         additionalOptions: {
