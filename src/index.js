@@ -12,8 +12,8 @@ const effects = [
   {
     watchId: "000",
     trigger: "effect1",
-    path: "Effects/TitoniF.deepar",
-    name: "Titon Watch - Black",
+    path: "Effects/000.deepar",
+    name: "Titon Watch",
   },
   {
     watchId: "001",
