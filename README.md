@@ -7,7 +7,7 @@ To run the development server, you need to have [Node.js](https://nodejs.org/en/
 ```bash
     npm install
     npm run build (only the first time)
-    npm run dev
+    npm run start
 ```
 
 To build the ad, run the following command:
