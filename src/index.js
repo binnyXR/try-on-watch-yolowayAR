@@ -213,9 +213,7 @@ async function main() {
       canvas.height = Math.floor(window.innerHeight * scale);
 
       // debugger;
-      const url = new URL(window.location.href);
-      const watchId = url.searchParams.get('watchId') ?? effects[0].watchId;
-      const watch = effects.find(watch => watch.watchId == watchId);
+      const watch = getWatch();
         
       deepAR = await deepar.initialize({
         licenseKey: "352e69b9f4d55ad7f451ccd80570165f4a752f6647efe4aecd10c0a3e10f96c21f45505012db1f28",
@@ -264,6 +262,7 @@ async function main() {
     }
   }
 
+  
   deepAR.callbacks.__deeparRendered = function () {
     // this allows us to render graphics (like a logo) on top of the deepAR canvas for the video recording
     if (!isRecording) {
@@ -288,6 +287,7 @@ async function main() {
     );
 
     // get image from file
+    console.log(watermarkedCanvas, 'watermarkedCanvas');
     if (logoImg) {
       var logoHeight = 20 * 3;
       var logoWidth = 128 * 3;
@@ -300,6 +300,12 @@ async function main() {
       );
     }
   };
+
+  function getWatch(){
+    const url = new URL(window.location.href);
+    const watchId = url.searchParams.get('watchId') ?? effects[0].watchId;
+    return effects.find(watch => watch.watchId == watchId);
+  }
 
   async function handleSelectEffect(effect) {
     if (!deepAR) return;
@@ -320,7 +326,11 @@ async function main() {
     const effectsArray = Object.values(effects);
 
     const effectTitleElement = document.getElementById("effect-title");
-    effectTitleElement.innerHTML = effects.effect1.name;
+    
+    debugger;
+    const watch = getWatch();
+    
+    effectTitleElement.innerHTML = watch.name;
 
     if (value === currentCarouselIndex) return;
 
@@ -606,6 +616,8 @@ async function main() {
       }, "image/jpeg");
     };
   }
+
+  
 
   const shareOrDownload = async (blob, fileName) => {
     const webShareSupported = "canShare" in navigator;
